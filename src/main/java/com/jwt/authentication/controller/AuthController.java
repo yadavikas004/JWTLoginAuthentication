@@ -69,9 +69,13 @@ public class AuthController {
 	}
 	
 	@PostMapping("/create-user")
-	public User createUser(@RequestBody User user) {
-		return userService.createUser(user);
-		
+	public ResponseEntity<String> createUser(@RequestBody User user) {
+		try {
+			userService.createUser(user);
+			return new ResponseEntity<>("User created successfully", HttpStatus.CREATED);
+		}catch (Exception e){
+			return new ResponseEntity<>("Email Already Exist", HttpStatus.BAD_REQUEST);
+		}
 	}
 	
 	

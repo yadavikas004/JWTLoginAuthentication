@@ -30,7 +30,10 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public User createUser(User user) {
 		// TODO Auto-generated method stub
-		user.setUserId(UUID.randomUUID().toString());
+//		user.setUserId(UUID.randomUUID().toString());
+		if(userRepository.existsByEmail(user.getEmail())){
+			throw new IllegalArgumentException("Email already exists");
+		}
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		return userRepository.save(user);
 	}

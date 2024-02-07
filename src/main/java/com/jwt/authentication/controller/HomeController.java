@@ -30,4 +30,24 @@ public class HomeController {
 	public String getLoggedInUser(Principal principal) {
 		return principal.getName();
 	}
+
+	@GetMapping("/signin")
+	public String login(){
+		return "login";
+	}
+
+	@GetMapping("/profile")
+	public String profile(){
+		return "profile";
+	}
+
+	@GetMapping("/about")
+	public String about(){
+		return "about";
+	}
+
+	@GetMapping("/index")
+	public String index(){
+		return "index";
+	}
 }

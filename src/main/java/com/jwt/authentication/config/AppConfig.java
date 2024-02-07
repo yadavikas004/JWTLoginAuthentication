@@ -30,6 +30,7 @@ public class AppConfig {
 
     @Bean
     AuthenticationManager authenticationManager(AuthenticationConfiguration builder) throws Exception {
+		System.out.println("AuthenticationConfiguration");
 		return builder.getAuthenticationManager();		
 	}
 }
