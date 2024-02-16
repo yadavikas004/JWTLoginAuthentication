@@ -3,6 +3,8 @@ package com.jwt.authentication.controller;
 import java.security.Principal;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,6 +16,7 @@ import com.jwt.authentication.services.UserServiceImpl;
 @RestController
 @RequestMapping("/admin")
 public class HomeController {
+	private Logger logger = LogManager.getLogger(HomeController.class);
 	
 	@Autowired
 	private UserServiceImpl userServiceImpl;
@@ -31,23 +34,5 @@ public class HomeController {
 		return principal.getName();
 	}
 
-	@GetMapping("/signin")
-	public String login(){
-		return "login";
-	}
 
-	@GetMapping("/profile")
-	public String profile(){
-		return "profile";
-	}
-
-	@GetMapping("/about")
-	public String about(){
-		return "about";
-	}
-
-	@GetMapping("/index")
-	public String index(){
-		return "index";
-	}
 }

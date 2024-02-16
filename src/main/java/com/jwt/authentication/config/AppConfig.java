@@ -23,10 +23,6 @@ public class AppConfig {
 //		return new InMemoryUserDetailsManager(user, user1);
 //	}
 
-	@Bean
-	PasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
 
     @Bean
     AuthenticationManager authenticationManager(AuthenticationConfiguration builder) throws Exception {

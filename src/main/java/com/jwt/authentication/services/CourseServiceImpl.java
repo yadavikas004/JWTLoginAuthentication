@@ -22,7 +22,7 @@ public class CourseServiceImpl implements CourseService{
     @Override
     public Course getCourse(Long courseId) {
         Optional<Course> optionalCourse = courseRepository.findById(courseId);
-        return optionalCourse.get();
+        return optionalCourse.orElseThrow();
     }
 
     @Override
@@ -32,7 +32,7 @@ public class CourseServiceImpl implements CourseService{
 
     @Override
     public Course updateCourse(Course course) {
-        Course existingCourse = courseRepository.findById(course.getId()).get();
+        Course existingCourse = courseRepository.findById(course.getId()).orElseThrow();
         System.out.println(existingCourse+"existingCourse");
         existingCourse.setTitle(course.getTitle());
         existingCourse.setDescription(course.getDescription());
@@ -42,5 +42,10 @@ public class CourseServiceImpl implements CourseService{
     @Override
     public void deleteCourse(Long courseId) {
         courseRepository.deleteById(courseId);
+    }
+
+    @Override
+    public Course getCourseById(Long id) {
+        return courseRepository.findById(id).orElse(null);
     }
 }

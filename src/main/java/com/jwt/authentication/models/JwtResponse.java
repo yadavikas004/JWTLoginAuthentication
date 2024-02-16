@@ -1,11 +1,8 @@
 package com.jwt.authentication.models;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
+
+import java.util.Collection;
 
 @Getter
 @Setter
@@ -17,5 +14,7 @@ public class JwtResponse {
 
 	private String jwtToken;
 	
-	private String username;
+	private String email;
+
+	private Collection<String> roles;
 }
