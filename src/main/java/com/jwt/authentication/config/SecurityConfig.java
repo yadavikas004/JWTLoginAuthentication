@@ -48,11 +48,14 @@ public class SecurityConfig{
 				.csrf(AbstractHttpConfigurer::disable).cors(AbstractHttpConfigurer::disable)
 				.authorizeHttpRequests(auth -> {
                     auth
-                            .requestMatchers("/course-list", "/create-course", "/edit-course", "/user-dashboard").permitAll()
-                            .requestMatchers("/course/**").hasRole("USER")
-                            .requestMatchers("/admin/user", "/admin-dashboard").hasRole("ADMIN")
+                            .requestMatchers("/course-list", "/create-course", "/edit-course", "/user-dashboard").hasRole("USER")
+//							.requestMatchers("/course-list", "/create-course", "/edit-course", "/user-dashboard").permitAll()
+                            .requestMatchers("/course/**").hasRole("ADMIN")
+//							.requestMatchers("/course/**").permitAll()
+                            .requestMatchers("/admin/user", "/admin-dashboard").hasAnyRole("ADMIN")
                             .requestMatchers("/auth/create-user").permitAll()
-                            .requestMatchers("/resources/**", "/auth/**", "/**", "/logout", "/auth/create-user").permitAll()
+//							.requestMatchers("/admin/user", "/admin-dashboard").permitAll()
+                            .requestMatchers("/resources/**", "/auth/**", "/logout", "/auth/create-user").permitAll()
                             .anyRequest().authenticated();
                 })
 				.formLogin(form -> {

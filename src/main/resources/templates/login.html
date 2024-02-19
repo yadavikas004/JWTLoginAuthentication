@@ -46,6 +46,7 @@
 <script>
 	// Function to load the HTML page
     function loadLoginPage() {
+    setAuthorizationHeader();
         $.ajax({
             type: "GET",
             url: "/",
@@ -87,18 +88,23 @@
     }
 
     // Function to get the redirect URL based on the user's role
-    function getRedirectUrl(role) {
-        // Use Thymeleaf expressions to generate the redirect URLs based on roles
-        // You may customize these URLs based on your actual endpoint structure
-        switch (role) {
+    function getRedirectUrl(roles) {
+    // Check if roles is an array and has at least one role
+    if (Array.isArray(roles) && roles.length > 0) {
+        // Use the first role to determine the redirect URL
+        switch (roles[0]) {
             case 'ROLE_ADMIN':
-                return '/admin-dashboard';
+                return '/course-list';
             case 'ROLE_USER':
                 return '/user-dashboard';
             default:
                 return '/course-list';
         }
-    }
+    } else {
+        // Handle the case where roles is not an array or is empty
+        return '/course-list';
+    	}
+	}
 
     // Extend jQuery to serialize form data into an object
     $.fn.serializeObject = function () {

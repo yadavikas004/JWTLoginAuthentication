@@ -10,6 +10,7 @@ import com.jwt.authentication.services.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -57,7 +58,9 @@ public class ViewController {
 //    -----------------------------------------------------------------------------------------------------------------------------
 
     @GetMapping("/admin-dashboard")
-    public String adminDashboard() {
+    public String adminDashboard(Authentication authentication) {
+        System.out.println("-------Principal:------- " + authentication.getPrincipal());
+        System.out.println("-------Authorities:------- " + authentication.getAuthorities());
         return "admin-dashboard"; // assuming you have a Thymeleaf template at src/main/resources/templates/admin/dashboard.html
     }
 
@@ -107,7 +110,4 @@ public class ViewController {
             return "course-list"; // Redirect to the course list page if the course is not found
         }
     }
-
-
-
 }

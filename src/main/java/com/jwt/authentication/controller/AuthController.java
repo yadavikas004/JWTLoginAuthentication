@@ -28,7 +28,6 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/auth")
-@CrossOrigin("*")
 @AllArgsConstructor
 @NoArgsConstructor
 public class AuthController {
@@ -52,7 +51,6 @@ public class AuthController {
 
 	@PostMapping("/user-login")
 	public ResponseEntity<JwtResponse> login(@RequestBody JwtRequest request) throws UsernameNotFoundException {
-		System.out.println("tste");
 		logger.info("----------user-login-api---------------");
 		try {
 			this.doAuthenticate(request.getEmail(), request.getPassword());
@@ -63,7 +61,6 @@ public class AuthController {
 
 			String token = this.helper.generateToken(userDetails);
 			logger.info("--------token generated--------\n"+token);
-//			String roles = String.valueOf(roleService.getAllRolesByEmail(request.getEmail()));
 			Set<String> roles = roleService.getAllRolesByEmail(request.getEmail()).stream()
 					.map(Role::getName)
 					.collect(Collectors.toSet());
@@ -107,6 +104,4 @@ public class AuthController {
 			return new ResponseEntity<>("Unexpected error occurred", HttpStatus.BAD_REQUEST);
 		}
 	}
-
-
 }
