@@ -1,0 +1,5 @@
+FROM openjdk:17
+WORKDIR /com/jwt/authentication
+COPY target/JWTLoginAuthentication-0.0.1-SNAPSHOT.jar JWTLoginAuthentication-0.0.1-SNAPSHOT.jar
+EXPOSE 8081
+CMD [ "java", "-jar", "JWTLoginAuthentication-0.0.1-SNAPSHOT.jar" ]
