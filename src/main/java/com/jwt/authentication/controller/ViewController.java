@@ -3,24 +3,32 @@ package com.jwt.authentication.controller;
 import com.jwt.authentication.dto.UserRegistrationDTO;
 import com.jwt.authentication.entities.Course;
 import com.jwt.authentication.entities.Role;
-import com.jwt.authentication.models.JwtRequest;
 import com.jwt.authentication.services.CourseService;
 import com.jwt.authentication.services.RoleService;
 import com.jwt.authentication.services.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @CrossOrigin
 @Controller
+@PreAuthorize("hasRole('ADMIN')")
 public class ViewController {
-    private Logger logger = LogManager.getLogger(ViewController.class);
+    private static final Logger logger = LogManager.getLogger(ViewController.class);
 
     @Autowired
     private RoleService roleService;
@@ -32,9 +40,25 @@ public class ViewController {
     private CourseService courseService;
 
     @GetMapping("/")
-    public String login(){
+    public String login(Model model, @RequestParam(name = "error", required = false) String error){
+        if (error != null) {
+            model.addAttribute("loginError", true);
+            model.addAttribute("errorMessage", getErrorMessage(error));
+        }
         return "login";
     }
+
+    private String getErrorMessage(String error) {
+        String errorMessage = "Invalid details";
+        if (error.contains("BadCredentialsException")) {
+            errorMessage = "Wrong username or password";
+        } else if (error.contains("LockedException")) {
+            errorMessage = "Your account has been locked due to multiple login attempts. Please contact support.";
+        } // Add more conditions based on specific exception types if needed
+
+        return errorMessage;
+    }
+
 
     @GetMapping("/profile")
     public String profile(){
@@ -49,19 +73,28 @@ public class ViewController {
         return "registration";
     }
 
-//    @GetMapping("/error")
-//    public String error() {
-//        return "error";
-//    }
+    @GetMapping("/error")
+    public String error() {
+        return "error";
+    }
 
 //    -----------------------------------------------------------------------------------------------------------------------------
 
     @GetMapping("/admin-dashboard")
+    @PreAuthorize("hasRole('ADMIN')")
     public String adminDashboard() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        List<String> roles = authentication.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.toList());
+
+        // Log roles for debugging
+        logger.info("User roles: {}", roles);
         return "admin-dashboard"; // assuming you have a Thymeleaf template at src/main/resources/templates/admin/dashboard.html
     }
 
     @GetMapping("/user-dashboard")
+    @PreAuthorize("hasRole('USER')")
     public String userDashboard() {
         return "user-dashboard"; // assuming you have a Thymeleaf template at src/main/resources/templates/user/dashboard.html
     }

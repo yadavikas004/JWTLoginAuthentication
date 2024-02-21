@@ -2,6 +2,8 @@ package com.jwt.authentication.controller;
 
 import com.jwt.authentication.entities.Course;
 import com.jwt.authentication.services.CourseService;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +16,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@PreAuthorize("hasRole('USER')")
+@RequestMapping("/courses")
+@AllArgsConstructor
+@NoArgsConstructor
+@PreAuthorize("hasRole('ADMIN')")
 public class CourseController {
     private Logger logger = LogManager.getLogger(CourseController.class);
 
@@ -22,13 +27,13 @@ public class CourseController {
     private CourseService courseService;
 
     // get the all courses
-    @GetMapping("/courses")
+    @GetMapping
     public List<Course> getCourses(){
         return courseService.getCourses();
     }
 
     // get the course by id
-    @GetMapping("/courses/{courseId}")
+    @GetMapping("/{courseId}")
     public ResponseEntity<Course> getCourse(@PathVariable String courseId) {
          try {
              courseService.getCourse(Long.parseLong(courseId));
@@ -39,7 +44,7 @@ public class CourseController {
     }
 
     // add the course
-    @PostMapping("/courses")
+    @PostMapping
     public ResponseEntity<Course> addCourse(@RequestBody Course course){
         try{
             courseService.addCourse(course);
@@ -50,7 +55,7 @@ public class CourseController {
     }
 
     // update the course
-    @PutMapping("/courses/{courseId}") ///{courseId}
+    @PutMapping("/{courseId}") ///{courseId}
     public ResponseEntity<Course> updateCourse(@PathVariable("courseId") Long courseId, @RequestBody Course course) {
         try {
             course.setId(courseId);
@@ -63,7 +68,7 @@ public class CourseController {
 
 
     // delete the course by id
-    @DeleteMapping("/courses/{courseId}")
+    @DeleteMapping("/{courseId}")
     public ResponseEntity<HttpStatus> deleteCourse(@PathVariable String courseId){
         try {
             courseService.deleteCourse(Long.parseLong(courseId));

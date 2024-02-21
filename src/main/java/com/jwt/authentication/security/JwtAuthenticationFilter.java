@@ -57,15 +57,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 			} catch (IllegalArgumentException e) {
 				logger.info("Illegal Argument while fetching the username !!");
-				logger.error("Ops!", e);
+				e.printStackTrace();
 			} catch (ExpiredJwtException e) {
 				logger.info("Given jwt token is expired !!");
-				logger.error("Ops!", e);
+				e.printStackTrace();
 			} catch (MalformedJwtException e) {
 				logger.info("Some changed has done in token !! Invalid Token");
-				logger.error("Ops!", e);
+				e.printStackTrace();
 			} catch (Exception e) {
-				logger.error("Ops!", e);
+				e.printStackTrace();
 			}
 		} else {
 			logger.info("Invalid Header Value !! ");

@@ -28,7 +28,6 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/auth")
-@CrossOrigin("*")
 @AllArgsConstructor
 @NoArgsConstructor
 public class AuthController {
@@ -52,7 +51,7 @@ public class AuthController {
 
 	@PostMapping("/user-login")
 	public ResponseEntity<JwtResponse> login(@RequestBody JwtRequest request) throws UsernameNotFoundException {
-		System.out.println("tste");
+		System.out.println("Request Came at Backend Server");
 		logger.info("----------user-login-api---------------");
 		try {
 			this.doAuthenticate(request.getEmail(), request.getPassword());
@@ -63,20 +62,20 @@ public class AuthController {
 
 			String token = this.helper.generateToken(userDetails);
 			logger.info("--------token generated--------\n"+token);
-//			String roles = String.valueOf(roleService.getAllRolesByEmail(request.getEmail()));
 			Set<String> roles = roleService.getAllRolesByEmail(request.getEmail()).stream()
 					.map(Role::getName)
 					.collect(Collectors.toSet());
+
 			JwtResponse response = JwtResponse.builder()
 					.jwtToken(token)
 					.email(userDetails.getUsername())
 					.roles(roles)
 					.build();
+
 			return new ResponseEntity<>(response, HttpStatus.OK);
 		}catch (AuthenticationException e){
 			return new ResponseEntity<>(new JwtResponse(), HttpStatus.UNAUTHORIZED);
 		}
-
 	}
 
 	private void doAuthenticate(String email, String password) {

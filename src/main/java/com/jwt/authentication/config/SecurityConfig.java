@@ -2,6 +2,7 @@ package com.jwt.authentication.config;
 
 import com.jwt.authentication.security.JwtAuthenticationEntryPoint;
 import com.jwt.authentication.security.JwtAuthenticationFilter;
+import com.jwt.authentication.security.JwtHelper;
 import com.jwt.authentication.services.CustomUserDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -16,12 +17,17 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.stereotype.Component;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
 @Configuration
+@Component
 public class SecurityConfig{
+
+	@Autowired
+	private JwtHelper jwtHelper;
 
 	@Autowired
 	private JwtAuthenticationEntryPoint authenticationEntryPoint;
@@ -48,11 +54,10 @@ public class SecurityConfig{
 				.csrf(AbstractHttpConfigurer::disable).cors(AbstractHttpConfigurer::disable)
 				.authorizeHttpRequests(auth -> {
                     auth
-                            .requestMatchers("/course-list", "/create-course", "/edit-course").hasRole("ADMIN")
-                            .requestMatchers("/course/**").hasRole("ADMIN")
-                            .requestMatchers("/admin/user", "/admin-dashboard").hasRole("ADMIN")
-                            .requestMatchers("/auth/create-user").permitAll()
-                            .requestMatchers("/resources/**", "/auth/**", "/**", "/logout", "/auth/create-user","/logout").permitAll()
+                            .requestMatchers("/course-list", "/create-course", "/edit-course","/admin-dashboard").hasRole("ADMIN")
+                            .requestMatchers("/courses/**").hasRole("ADMIN")
+                            .requestMatchers("/admin/**").hasRole("ADMIN")
+                            .requestMatchers("/resources/**", "/auth/**", "/auth/create-user","/logout").permitAll()
                             .anyRequest().authenticated();
                 })
 				.formLogin(form -> {
@@ -73,7 +78,10 @@ public class SecurityConfig{
 				})
 				.exceptionHandling(ex -> ex.authenticationEntryPoint(authenticationEntryPoint))
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+
+		// Add JWT authentication filter
 		http.addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class);
+
 		return http.build();
 	}
 

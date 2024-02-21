@@ -18,7 +18,18 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 	public void commence(HttpServletRequest request, HttpServletResponse response,
 			AuthenticationException authException) throws IOException, ServletException {
 		// TODO Auto-generated method stub
+
+		// Log details of the unauthorized access
+		// This log information is for development/debugging purposes
+		System.out.println("Unauthorized access. Request details: " +
+				"Method=" + request.getMethod() +
+				", URI=" + request.getRequestURI() +
+				", Remote Address=" + request.getRemoteAddr());
+
+		// Set the response status to unauthorized
 		response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+
+		// Provide a more detailed error message
 		PrintWriter writer = response.getWriter();
 		writer.println("Access Denied !! "+authException.getMessage());
 
