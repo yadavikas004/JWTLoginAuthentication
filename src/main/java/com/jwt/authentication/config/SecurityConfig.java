@@ -78,10 +78,7 @@ public class SecurityConfig{
 				})
 				.exceptionHandling(ex -> ex.authenticationEntryPoint(authenticationEntryPoint))
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-
-		// Add JWT authentication filter
 		http.addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class);
-
 		return http.build();
 	}
 

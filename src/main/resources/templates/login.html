@@ -45,7 +45,7 @@
 </div>
 
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-<script src="../tokenUtils.js" Content-Type: text/javascript></script>
+<script src="../tokenUtils.js"></script>
 <script>
 	// Function to load the redirected HTML page after a successful login
 	function loadRedirectedPage(redirectUrl) {
@@ -70,7 +70,7 @@
 		});
 	}
 
-	// Function to submit the login form
+    // Function to submit the login form
 	function submitForm() {
 		var formData = $("#loginForm").serializeObject();
 		$.ajax({
@@ -103,15 +103,14 @@
 		});
 	}
 
-
-// Function to get the redirect URL based on the user's role
-function getRedirectUrl(roles) {
+    // Function to get the redirect URL based on the user's role
+    function getRedirectUrl(roles) {
     // Check if roles is an array and has at least one role
     if (Array.isArray(roles) && roles.length > 0) {
         // Use the first role to determine the redirect URL
         switch (roles[0]) {
             case 'ROLE_ADMIN':
-                return '/admin-dashboard';
+                return '/course-list';
             case 'ROLE_USER':
                 return '/user-dashboard';
             default:
@@ -139,6 +138,26 @@ $.fn.serializeObject = function () {
     });
     return obj;
 };
+
+    	}
+	}
+
+    // Extend jQuery to serialize form data into an object
+    $.fn.serializeObject = function () {
+        var obj = {};
+        var form = this.serializeArray();
+        $.each(form, function () {
+            if (obj[this.name] !== undefined) {
+                if (!obj[this.name].push) {
+                    obj[this.name] = [obj[this.name]];
+                }
+                obj[this.name].push(this.value || '');
+            } else {
+                obj[this.name] = this.value || '';
+            }
+        });
+        return obj;
+    };
 
     // Attach the submitForm function to the click event of the login button
     $(document).ready(function () {

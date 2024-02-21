@@ -58,6 +58,7 @@
             contentType: 'application/json',
             success: function (response) {
                 // Handle success, e.g., redirect to the course list page
+                var storedToken = getStoredToken();
                 window.location.href = '/course-list';
             },
             error: function (error) {

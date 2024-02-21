@@ -19,6 +19,7 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 			AuthenticationException authException) throws IOException, ServletException {
 		// TODO Auto-generated method stub
 
+
 		// Log details of the unauthorized access
 		// This log information is for development/debugging purposes
 		System.out.println("Unauthorized access. Request details: " +

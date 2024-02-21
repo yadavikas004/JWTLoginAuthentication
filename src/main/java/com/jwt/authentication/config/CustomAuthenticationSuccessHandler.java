@@ -23,8 +23,4 @@ public class CustomAuthenticationSuccessHandler extends SavedRequestAwareAuthent
 
     @Value("${jwt.expiration}")
     private int jwtExpiration;
-
-
-
-
 }

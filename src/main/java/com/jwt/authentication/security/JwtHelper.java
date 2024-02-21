@@ -37,6 +37,7 @@ public class JwtHelper {
     }
 
     //for retrieveing any information from token we will need the secret key
+    @SuppressWarnings("deprecation")
     private Claims getAllClaimsFromToken(String token) {
         return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
     }

@@ -52,7 +52,6 @@
 <script>
     $(document).ready(function() {
         var jwtToken = localStorage.getItem('jwtToken');
-
         // Event handler for the delete button
         $('.deleteCourseButton').on('click', function(e) {
             e.preventDefault(); // Prevent the default behavior of the anchor tag
@@ -70,6 +69,7 @@
                     success: function(response) {
                         // Handle success, e.g., remove the row from the table
                         alert('Course deleted successfully!');
+                        var storedToken = getStoredToken();
                         // Assuming you want to remove the row upon successful deletion
                         $(this).closest('tr').remove();
                         // Handle success, e.g., redirect to the course list page

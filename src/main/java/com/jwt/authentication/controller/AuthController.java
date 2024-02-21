@@ -43,7 +43,7 @@ public class AuthController {
 
 	@Autowired
 	private RoleService roleService;
-	
+
 	@Autowired
 	private UserService userService;
 
@@ -56,12 +56,12 @@ public class AuthController {
 		try {
 			this.doAuthenticate(request.getEmail(), request.getPassword());
 			UserDetails userDetails = userDetailService.loadUserByUsername(request.getEmail());
-			if (request.getEmail()==null){
+			if (request.getEmail() == null) {
 				System.out.println("This User Doesn't exit in Database!!!");
 			}
 
 			String token = this.helper.generateToken(userDetails);
-			logger.info("--------token generated--------\n"+token);
+			logger.info("--------token generated--------\n" + token);
 			Set<String> roles = roleService.getAllRolesByEmail(request.getEmail()).stream()
 					.map(Role::getName)
 					.collect(Collectors.toSet());
@@ -73,7 +73,7 @@ public class AuthController {
 					.build();
 
 			return new ResponseEntity<>(response, HttpStatus.OK);
-		}catch (AuthenticationException e){
+		} catch (AuthenticationException e) {
 			return new ResponseEntity<>(new JwtResponse(), HttpStatus.UNAUTHORIZED);
 		}
 	}
@@ -81,18 +81,18 @@ public class AuthController {
 	private void doAuthenticate(String email, String password) {
 		// TODO Auto-generated method stub
 		UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(email, password);
-		try{
+		try {
 			authenticationManager.authenticate(authenticationToken);
-		}catch(BadCredentialsException e) {
+		} catch (BadCredentialsException e) {
 			throw new RuntimeException("Invalid Username or Password !!");
-		}	
+		}
 	}
-	
+
 	@ExceptionHandler(BadCredentialsException.class)
 	public String exceptionHandler() {
 		return "Credentials Invalid !!";
 	}
-	
+
 	@PostMapping("/create-user")
 	public ResponseEntity<String> createUser(@RequestBody UserRegistrationDTO registrationDto) {
 		logger.info("--------create-user-api---------");
@@ -102,10 +102,8 @@ public class AuthController {
 			return new ResponseEntity<>("User created successfully", HttpStatus.CREATED);
 		} catch (IllegalArgumentException e) {
 			return new ResponseEntity<>("Role not found or Email already exists", HttpStatus.BAD_REQUEST);
-		} catch (Exception e){
+		} catch (Exception e) {
 			return new ResponseEntity<>("Unexpected error occurred", HttpStatus.BAD_REQUEST);
 		}
 	}
-
-
 }

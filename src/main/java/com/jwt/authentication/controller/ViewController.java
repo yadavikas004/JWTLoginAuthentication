@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
 @CrossOrigin
 @Controller
 @PreAuthorize("hasRole('ADMIN')")
@@ -59,6 +58,9 @@ public class ViewController {
         return errorMessage;
     }
 
+    public String login(){
+        return "login";
+    }
 
     @GetMapping("/profile")
     public String profile(){
@@ -90,7 +92,7 @@ public class ViewController {
 
         // Log roles for debugging
         logger.info("User roles: {}", roles);
-        return "admin-dashboard"; // assuming you have a Thymeleaf template at src/main/resources/templates/admin/dashboard.html
+        return "admin-dashboard";
     }
 
     @GetMapping("/user-dashboard")
@@ -140,7 +142,4 @@ public class ViewController {
             return "course-list"; // Redirect to the course list page if the course is not found
         }
     }
-
-
-
 }

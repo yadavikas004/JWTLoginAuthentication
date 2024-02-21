@@ -57,15 +57,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 			} catch (IllegalArgumentException e) {
 				logger.info("Illegal Argument while fetching the username !!");
-				e.printStackTrace();
+
 			} catch (ExpiredJwtException e) {
 				logger.info("Given jwt token is expired !!");
-				e.printStackTrace();
+				logger.error("Ops!", e);
 			} catch (MalformedJwtException e) {
 				logger.info("Some changed has done in token !! Invalid Token");
-				e.printStackTrace();
+				logger.error("Ops!", e);
 			} catch (Exception e) {
-				e.printStackTrace();
+				logger.error("Ops!", e);
 			}
 		} else {
 			logger.info("Invalid Header Value !! ");
@@ -77,8 +77,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 			// fetch user detail from username
 			UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
 			Boolean validateToken = this.jwtHelper.validateToken(token, userDetails);
-			if (validateToken) {
 
+			if (jwtHelper.validateToken(token, userDetails)) {
 				// set the authentication
 				UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
 						userDetails, null, userDetails.getAuthorities());
