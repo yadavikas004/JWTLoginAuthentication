@@ -25,10 +25,4 @@ public class AppConfig {
 //		return new InMemoryUserDetailsManager(user, user1);
 //	}
 
-
-    @Bean
-    AuthenticationManager authenticationManager(AuthenticationConfiguration builder) throws Exception {
-		System.out.println("AuthenticationConfiguration");
-		return builder.getAuthenticationManager();		
-	}
 }

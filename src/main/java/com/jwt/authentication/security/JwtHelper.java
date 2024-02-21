@@ -17,7 +17,6 @@ public class JwtHelper {
 
     //requirement :
     public static final long JWT_TOKEN_VALIDITY = 5 * 60 * 60;
-
     //    public static final long JWT_TOKEN_VALIDITY =  60;
     private String secret = "afafasfafafasfasfasfafacasdasfasxASFACASDFACASDFASFASFDAFASFASDAADSCSDFADCVSGCFVADXCcadwavfsfarvf";
 
@@ -61,11 +60,14 @@ public class JwtHelper {
     //   compaction of the JWT to a URL-safe string
 
     private String doGenerateToken(Map<String, Object> claims, String subject) {
-
         //noinspection deprecation
-        return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
+        return Jwts.builder()
+                .setClaims(claims)
+                .setSubject(subject)
+                .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY * 1000))
-                .signWith(SignatureAlgorithm.HS512, secret).compact();
+                .signWith(SignatureAlgorithm.HS512, secret)
+                .compact();
     }
 
     //validate token

@@ -7,7 +7,9 @@ import com.jwt.authentication.services.CustomUserDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -48,7 +50,6 @@ public class SecurityConfig{
 
 	@Bean
 	SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-
 //		configuration
 		http
 				.csrf(AbstractHttpConfigurer::disable).cors(AbstractHttpConfigurer::disable)
@@ -82,19 +83,32 @@ public class SecurityConfig{
 		return http.build();
 	}
 
+	public DaoAuthenticationProvider daoAuthenticationProvider() {
+		DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
+		daoAuthenticationProvider.setUserDetailsService(userDetailsService);
+		daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
+		return daoAuthenticationProvider;
+	}
+
+	@Bean
+	AuthenticationManager authenticationManager(AuthenticationConfiguration builder) throws Exception {
+		System.out.println("AuthenticationConfiguration");
+		return builder.getAuthenticationManager();
+	}
+
 	@Bean
 	public WebSecurityCustomizer webSecurityCustomizer() {
 		return (web) -> {
 			web.ignoring().requestMatchers(
 					"/*.css",
-							"/*.js",
-							"/*.json",
-							"/*.ico",
-							"/*.tff",
-							"/*.woff",
-							"/*.woff2",
-							"/*.eot",
-							"/*.otf");
+					"/*.js",
+					"/*.json",
+					"/*.ico",
+					"/*.tff",
+					"/*.woff",
+					"/*.woff2",
+					"/*.eot",
+					"/*.otf");
 		};
 	}
 
@@ -114,12 +128,4 @@ public class SecurityConfig{
 		source.registerCorsConfiguration("/**", config);
 		return new CorsFilter(source);
 	}
-
-	public DaoAuthenticationProvider daoAuthenticationProvider() {
-		DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
-		daoAuthenticationProvider.setUserDetailsService(userDetailsService);
-		daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
-		return daoAuthenticationProvider;
-	}
-
 }
